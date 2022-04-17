@@ -4,8 +4,10 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
+	"github.com/zurkiyeh/go-production-service/internal/comment"
 	"github.com/zurkiyeh/go-production-service/internal/db"
 )
 
@@ -24,6 +26,20 @@ func Run() error {
 		return err
 	}
 	fmt.Println("Database connection was successful")
+
+	cmtService := comment.NewService(db)
+
+	cmtService.PostComment(context.Background(), comment.Comment{
+		ID:     "f9a9f7bc-ed87-4aec-b5c6-ec37f6222147",
+		Author: "Me",
+		Slug:   "",
+		Body:   "You're a donkey",
+	})
+
+	// fmt.Println(cmtService.GetComment(
+	// 	context.Background(),
+	// 	"f9a9f7bc-ed87-4aec-b5c6-ec37f6222147",
+	// ))
 
 	return nil
 }
