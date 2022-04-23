@@ -4,11 +4,11 @@
 package main
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/zurkiyeh/go-production-service/internal/comment"
 	"github.com/zurkiyeh/go-production-service/internal/db"
+	transportHttp "github.com/zurkiyeh/go-production-service/internal/transport/http"
 )
 
 // Reposnible for instantiation and start up for our a function
@@ -29,17 +29,10 @@ func Run() error {
 
 	cmtService := comment.NewService(db)
 
-	cmtService.PostComment(context.Background(), comment.Comment{
-		ID:     "f9a9f7bc-ed87-4aec-b5c6-ec37f6222147",
-		Author: "Me",
-		Slug:   "",
-		Body:   "You're a donkey",
-	})
-
-	// fmt.Println(cmtService.GetComment(
-	// 	context.Background(),
-	// 	"f9a9f7bc-ed87-4aec-b5c6-ec37f6222147",
-	// ))
+	httpHandler := transportHttp.NewHandler(cmtService)
+	if err := httpHandler.Serve(); err != nil {
+		return err
+	}
 
 	return nil
 }
