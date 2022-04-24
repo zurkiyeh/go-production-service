@@ -27,6 +27,11 @@ func convertCommentRowToComment(c CommentRow) comment.Comment {
 }
 
 func (d *Database) GetComment(ctx context.Context, uuid string) (comment.Comment, error) {
+	// Add this sleep func to observe the result of the context timeout feature
+	// _, err := d.Client.ExecContext(ctx, "SELECT pg_sleep")
+	// if err != nil {
+	// 	return comment.Comment{}, err
+	// }
 	var cmtRow CommentRow
 	row := d.Client.QueryRowContext(
 		ctx,
